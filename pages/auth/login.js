@@ -1,27 +1,37 @@
-import React from 'react';
-import { useState } from 'react';
+import React, {useState, useEffect} from 'react'
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import {auth} from '../fire';
 
 const login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(email, password);
+  const handleLogin = async () => {
+    try {
+      const user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+      console.log(user);
+    }
+    catch (error) {
+      console.log(error.message);
+    }
   }
-
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        email:
-        <input value={email} onChange = { (e) => setEmail(e.target.value)} type="email" name="email" />
-      </label>
-      <label>
-        password:
-        <input value={password} onChange = { (e) => setPassword(e.target.value)} type="password" name="password" />
-      </label>
-      <input type="submit" value="Submit" />
-    </form>
+    <div className='login'>
+      <div className='loginContainer'>
+        <h2>Logging In</h2>
+        <input 
+          placeholder='Email'
+          type='email'
+          onChange={(e) => setLoginEmail(e.target.value)}
+        />
+        <input 
+          placeholder='Password'
+          type='password'
+          onChange={(e) => setLoginPassword(e.target.value)}
+        />
+        <button onClick={handleLogin}>Sign In</button> 
+      </div>
+    </div>
   )
 }
 
